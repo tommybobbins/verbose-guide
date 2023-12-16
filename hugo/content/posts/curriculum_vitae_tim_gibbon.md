@@ -10,13 +10,12 @@ draft: false
 ### Jul 2022 - Current Senior DevOps Engineer, Missionlabs/Gammalabs
 
 - Terraform build and deployment to 30 AWS/3 GCP Accounts (bitbucket pipelines).
-- 3 major projects delivered on-time, within budget and achieved 99.98% an-
-nual availability.
+- 3 major projects delivered within timescales, budget and to 99.98% annual availability.
 - Cost optimisation - designed and implemented power saving for EKS and EC2 resulting in $264,000 reduction in 2023 AWS costs.
 - ArgoCD implemented to increase development team velocity.
 - Migrated Call-Centre as a Service (CCaaS) from on-premise hardware (docker-compose) to AWS (EKS/kubernetes) within 2 months.
 - Ported Unified Communications as a Service (UCaaS) project from AWS to GCP for disaster recovery.
-- Disaster recovery lead engineer.
+- Lead Disaster recovery engineer.
 - Build out of Grafana/Prometheus/Thanos for high availability metrics and monitoring.
 - Trivy deployment, allowing developers to identify security vulnerabilities during development.
 - Zero downtime Upgrades of Kubernetes (EKS) clusters from versions 1.21 through 1.28.
