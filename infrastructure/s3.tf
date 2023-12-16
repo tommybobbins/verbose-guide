@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "www" {
   bucket = "www.${var.domain_name}"
 }
 
-resource "aws_s3_bucket_object" "object" {
+resource "aws_s3_object" "object" {
   bucket = aws_s3_bucket.www.bucket
   key    = "hello.txt"
   source = "hello.txt"

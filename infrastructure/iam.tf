@@ -10,7 +10,9 @@ data "aws_iam_policy_document" "s3_write_access" {
       "s3:GetObject",
       "s3:PutObject",
       "s3:ListObjectsV2",
-      "s3:CopyObject"
+      "s3:ListBucket",
+      "s3:CopyObject",
+      "s3:DeleteObject"
     ]
     resources = [aws_s3_bucket.www.arn,"${aws_s3_bucket.www.arn}/*"]
   }
@@ -37,4 +39,5 @@ module "github-oidc" {
 
   repositories              = [var.github_repository]
   oidc_role_attach_policies = [aws_iam_policy.s3_write_access.arn]
+#  oidc_role_attach_policies = ["arn:aws:iam::aws:policy/AmazonS3FullAccess"]
 }
