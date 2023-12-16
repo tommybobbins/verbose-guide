@@ -3,6 +3,13 @@ resource "aws_s3_bucket" "www" {
   bucket = "www.${var.domain_name}"
 }
 
+resource "aws_s3_bucket_ownership_controls" "example" {
+  bucket = aws_s3_bucket.www.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
 resource "aws_s3_object" "object" {
   bucket = aws_s3_bucket.www.bucket
   key    = "hello.txt"
@@ -13,10 +20,10 @@ resource "aws_s3_object" "object" {
 resource "aws_s3_bucket_public_access_block" "www" {
   bucket = aws_s3_bucket.www.bucket
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 resource "aws_cloudfront_origin_access_control" "www" {
@@ -29,7 +36,7 @@ resource "aws_cloudfront_origin_access_control" "www" {
 
 data "aws_iam_policy_document" "www" {
   statement {
-    actions   = ["s3:GetObject"]
+    actions   = ["s3:*"]
     resources = ["${aws_s3_bucket.www.arn}/*"]
     principals {
       type        = "Service"
@@ -68,6 +75,14 @@ resource "aws_s3_bucket_website_configuration" "www" {
   error_document {
     key = "error.html"
   }
+  routing_rule {
+    condition {
+      http_error_code_returned_equals = "404"
+    }
+    redirect {
+      replace_key_prefix_with = "index.html"
+    }
+  }
 }
 
 resource "aws_s3_bucket_cors_configuration" "www_cors" {
@@ -79,10 +94,4 @@ resource "aws_s3_bucket_cors_configuration" "www_cors" {
     allowed_origins = ["https://www.${var.domain_name}"]
     expose_headers  = ["ETag"]
   }
-}
-
-# S3 bucket for www.
-resource "aws_s3_bucket_acl" "www" {
-  bucket = aws_s3_bucket.www.id
-  acl    = "public-read"
 }

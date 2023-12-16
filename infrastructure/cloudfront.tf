@@ -1,10 +1,19 @@
 # Cloudfront distribution for main s3 site.
 resource "aws_cloudfront_distribution" "www_s3_distribution" {
   origin {
-    domain_name              = aws_s3_bucket.www.website_endpoint
-    origin_id                = "www.${var.domain_name}"
-    origin_access_control_id = aws_cloudfront_origin_access_control.www.id
+    domain_name              = aws_s3_bucket.www.bucket_regional_domain_name
+    origin_id                = "files_oac"
+    origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
+
+  origin {
+    domain_name = aws_s3_bucket.www.bucket_regional_domain_name
+    origin_id   = "files_oai"
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
+    }
+  }
+
 
   enabled             = true
   is_ipv6_enabled     = true
@@ -22,7 +31,7 @@ resource "aws_cloudfront_distribution" "www_s3_distribution" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "S3-www.${var.domain_name}"
+    target_origin_id = "files_oac"
 
     forwarded_values {
       query_string = false
@@ -52,3 +61,41 @@ resource "aws_cloudfront_distribution" "www_s3_distribution" {
   }
 
 }
+
+resource "aws_cloudfront_origin_access_identity" "oai" {
+}
+
+
+resource "aws_cloudfront_origin_access_control" "oac" {
+  name                              = "cloudfront-bucket-${aws_s3_bucket.www.id}"
+  description                       = ""
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
+
+data "aws_iam_policy_document" "default" {
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.www.arn}/*"]
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.www_s3_distribution.arn]
+    }
+  }
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.www.arn}/*"]
+    principals {
+      type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.oai.iam_arn]
+    }
+  }
+}
+
