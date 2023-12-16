@@ -29,8 +29,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-region: $AWS_REGION
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-oidc-provider-aws
+          aws-region: ${{ var.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ var.AWS_ACCOUNT_ID }}:role/github-oidc-provider-aws
 
       - name: Deploy static site to S3 bucket
-        run: aws s3 sync ./hugo/public/ s3://${{ env.AWS_WWW_BUCKET_NAME }} --delete
+        run: aws s3 sync ./hugo/public/ s3://${{ var.AWS_WWW_BUCKET_NAME }} --delete
