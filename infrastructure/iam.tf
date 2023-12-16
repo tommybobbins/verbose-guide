@@ -45,3 +45,14 @@ resource "aws_secretsmanager_secret_version" "s3_write_access" {
     }
 EOF
 }
+
+module "github-oidc" {
+  source  = "terraform-module/github-oidc-provider/aws"
+  version = "~> 1"
+
+  create_oidc_provider = true
+  create_oidc_role     = true
+
+  repositories              = [var.github_repository]
+  oidc_role_attach_policies = [aws_iam_policy.s3_write_access.arn]
+}
