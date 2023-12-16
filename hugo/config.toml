@@ -29,7 +29,7 @@ uglyURLs = true
       [[languages.en.menu.main]]
         identifier = "about"
         name = "About"
-        url = "/posts/about/"
+        url = "/posts/about/index.html"
       [[languages.en.menu.main]]
         identifier = "Twitter"
         name = "Twitter"
@@ -41,4 +41,4 @@ uglyURLs = true
       [[languages.en.menu.main]]
         identifier = "Linux"
         name = "Linux"
-        url = "/posts/linux/"
+        url = "/posts/linux/index.html"
