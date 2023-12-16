@@ -25,10 +25,18 @@ jobs:
           hugo-version: latest
           extended: true
 
+      - uses: actions/cache@v2
+        with:
+          path: /tmp/hugo_cache_s3
+          key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-hugomod-
+
+
       - name: Build
         run: |
              cd hugo 
-             hugo --config config.toml --minify
+             hugo --config config.toml
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
