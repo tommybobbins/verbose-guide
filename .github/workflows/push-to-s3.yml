@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: true  # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
@@ -21,17 +21,10 @@ jobs:
           hugo-version: latest
           extended: true
 
-      - uses: actions/cache@v2
-        with:
-          path: /tmp/hugo_cache_s3
-          key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-hugomod-
-       
       - name: Build
         run: |
              cd hugo 
-             hugo --config config.toml
+             hugo --config config.toml --minify
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
