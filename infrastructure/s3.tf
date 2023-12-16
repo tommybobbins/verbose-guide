@@ -75,14 +75,14 @@ resource "aws_s3_bucket_website_configuration" "www" {
   error_document {
     key = "error.html"
   }
-  routing_rule {
-    condition {
-      http_error_code_returned_equals = "404"
-    }
-    redirect {
-      replace_key_prefix_with = "index.html"
-    }
-  }
+#  routing_rule {
+#    condition {
+#      http_error_code_returned_equals = "404"
+#    }
+#    redirect {
+#      replace_key_prefix_with = "index.html"
+#    }
+#  }
 }
 
 resource "aws_s3_bucket_cors_configuration" "www_cors" {

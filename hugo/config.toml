@@ -12,7 +12,7 @@ paginate = 5
 
 [languages]
   [languages.en]
-    title = "chegwin.org"
+    title = "www.chegwin.org"
     subtitle = ""
     keywords = ""
     copyright = "&copy; 2020"
