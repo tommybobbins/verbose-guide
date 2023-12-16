@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "s3_write_access" {
       "s3:ListObjectsV2",
       "s3:CopyObject"
     ]
-    resources = [aws_s3_bucket.www.arn]
+    resources = [aws_s3_bucket.www.arn,"${aws_s3_bucket.www.arn}/*"]
   }
 }
 
