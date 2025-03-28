@@ -17,5 +17,4 @@ Clone this repository
 ``` 
    $ git clone https://github.com/tommybobbins/verbose-guide
 ```
- 
 Change into the u-o-s directory and then initialise the submodules. Make, Commit & Push changes. The pipeline will run.
