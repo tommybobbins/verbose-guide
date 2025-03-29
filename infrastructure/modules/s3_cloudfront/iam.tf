@@ -1,7 +1,3 @@
-resource "aws_iam_user" "s3_write_access" {
-  name = "${split(".",var.domain_name)[0]}-bucket-write-role"
-}
-
 data "aws_iam_policy_document" "s3_write_access" {
   statement {
     sid    = "AllowS3RWScript"
@@ -14,7 +10,7 @@ data "aws_iam_policy_document" "s3_write_access" {
       "s3:CopyObject",
       "s3:DeleteObject"
     ]
-    resources = [aws_s3_bucket.www.arn,"${aws_s3_bucket.www.arn}/*"]
+    resources = [module.website.s3_bucket_arn,"${module.website.s3_bucket_arn}/*"]
   }
 }
 
@@ -22,11 +18,6 @@ resource "aws_iam_policy" "s3_write_access" {
   name   = "AllowWriteBucket-${split(".",var.domain_name)[0]}"
   path   = "/"
   policy = data.aws_iam_policy_document.s3_write_access.json
-}
-
-resource "aws_iam_user_policy_attachment" "s3_write_access" {
-  user       = aws_iam_user.s3_write_access.name
-  policy_arn = aws_iam_policy.s3_write_access.arn
 }
 
 locals {
@@ -53,4 +44,4 @@ module "github-oidc" {
 }
 
 
-# This is a test
+# # This is a test
